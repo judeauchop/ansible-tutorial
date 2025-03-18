@@ -1,5 +1,5 @@
-172.17.193.100
-172.17.193.117
-172.17.193.118
-172.17.193.119
-172.17.193.122
+172.17.193.100 tmux_package=tmux vim_package=vim-nox
+172.17.193.117 tmux_package=tmux vim_package=vim-nox
+172.17.193.118 tmux_package=tmux vim_package=vim-nox
+172.17.193.119 tmux_package=tmux vim_package=vim-nox
+172.17.193.122 tmux_package=tmux vim_package=vim

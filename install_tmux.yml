@@ -4,37 +4,10 @@
   become: true
   tasks:
 
-  - name: update repo index
-    apt:
-      update_cache: yes 
-    when: ansible_distribution in ["Ubuntu", "Linux Mint"]
-
-  - name: install tmux package
-    apt:
-      name: tmux
+  - name: install tmux and vim packages
+    package:
+      name: 
+        - "{{ tmux_package }}"
+        - "{{ vim_package }}"
       state: latest
-    when: ansible_distribution in ["Ubuntu", "Linux Mint"]
-
-  - name: install vim-nox
-    apt:
-      name: vim-nox 
-      state: latest
-    when: ansible_distribution in ["Ubuntu", "Linux Mint"]
-
-  - name: update repo index
-    dnf:
       update_cache: yes
-    when: ansible_distribution in ["Rocky", "RHEL"]
-
-  - name: install tmux package
-    dnf:
-      name: tmux
-      state: latest
-    when: ansible_distribution in ["Rocky", "RHEL"]
-
-  - name: install vim
-    dnf:
-      name: vim
-      state: latest
-    when: ansible_distribution in ["Rocky", "RHEL"]
-
