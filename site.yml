@@ -2,22 +2,52 @@
 
 - hosts: all
   become: true
-  tasks:
+  pre_tasks:
+
+  - name: install updates (RHEL)
+    tags: always
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution_file_variety == "RedHat"
+
+  - name: install updates (Debian)
+    tags: always
+    apt: 
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution_file_variety == "Debian"
+
+- hosts: web_servers
+  become: true
+  tasks: 
 
   - name: install tmux and vim packages on debian systems
+    tags: tmux,vim-nox,debain
     apt:
       name: 
         - tmux
         - vim-nox
       state: latest
-      update_cache: yes
     when: ansible_distribution_file_variety == "Debian" 
 
   - name: install tmux and vim packages on fedora systems
+    tags: tmux,vim,redhat
     dnf:
       name:
         - tmux
         - vim
       state: latest
-      update_cache: yes
     when: ansible_distribution_file_variety == "RedHat"
+
+- hosts: db_servers
+  become: true
+  tasks:
+
+    - name: uninstall cmatrix
+      tags: cmatrx,debian
+      apt:
+        name:
+          - cmatrix
+        state: absent 
+      when: ansible_distribution_file_variety == "Debian"
