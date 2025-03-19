@@ -8,3 +8,6 @@
 
 [file_servers]
 172.17.193.119
+
+[workstations]
+172.17.193.100
