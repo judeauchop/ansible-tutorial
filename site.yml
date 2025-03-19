@@ -40,6 +40,15 @@
       state: latest
     when: ansible_distribution_file_variety == "RedHat"
 
+  - name: copy default html file for site
+    tags: tmux,vim, redhat
+    copy:
+      src: default_site.html
+      dest: /home/dale/default_site.html
+      owner: dale
+      group: dale
+      mode: 0644
+
 - hosts: db_servers
   become: true
   tasks:
