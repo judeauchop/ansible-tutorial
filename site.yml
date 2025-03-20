@@ -4,18 +4,18 @@
   become: true
   pre_tasks:
 
-  - name: install updates (RHEL)
+  - name: update repo cache (RHEL)
     tags: always
     dnf:
-      update_only: yes
       update_cache: yes
+    changed_when: false
     when: ansible_distribution_file_variety == "RedHat"
 
-  - name: install updates (Debian)
+  - name: update repo cache (Debian)
     tags: always
     apt: 
-      upgrade: dist
       update_cache: yes
+    changed_when: false
     when: ansible_distribution_file_variety == "Debian"
 
 - hosts: workstations

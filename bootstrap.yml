@@ -1,0 +1,44 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: Install updates (Fedora)
+    tags: always
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution_file_variety == "RedHat" 
+
+  - name: Install updates (Debian)
+    tags: always
+    apt:
+      upgrade: full
+      update_cache: yes
+    when: ansible_distribution_file_variety == "Debian"
+  
+- hosts: all
+  become: true
+  tasks:
+
+  - name: create auto user
+    tags: always
+    user:
+      name: auto
+      groups: root
+
+  - name: add ssh key for auto
+    tags: always
+    authorized_key:
+      user: auto
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBfDLJOcOGCKcJ4on03bZ7YyQWIOYt3N/J3xqXqh6Pjc ansible"
+
+  - name: add sudoers file for auto
+    tags: always
+    copy:
+      src: sudoer_auto
+      dest: /etc/sudoers.d/auto
+      owner: root
+      group: root
+      mode: 0440
