@@ -18,78 +18,27 @@
     changed_when: false
     when: ansible_distribution_file_variety == "Debian"
 
+- hosts: all
+  become: true
+  roles:
+    - base
+
 - hosts: workstations
   become: true
-  tasks:
-
-    - name: Install unzip
-      package:
-        name: unzip
-
-    - name: install terraform
-      unarchive:
-        src: https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip
-        dest: /usr/local/bin
-        remote_src: yes
-        mode: 0755
-        owner: root
-        group: root
-
-    - name: modify zabbix_agent.conf
-      tags: zabbix,workstations
-      lineinfile:
-        path: /etc/zabbix/zabbix_agentd.conf
-        regexp: '^ServerActive'
-        line: ServerActive=172.17.193.148
-      register: zabbix
-
-    - name: start and enable zabbix.agent
-      tags: zabbix,workstations
-      service:
-        name: zabbix-agent
-        state: restarted
-        enabled: yes
-      when: zabbix.changed
+  roles:
+    - workstations
 
 - hosts: web_servers
   become: true
-  tasks: 
-
-  - name: install tmux and vim packages on debian systems
-    tags: tmux,vim-nox,debain
-    apt:
-      name: 
-        - tmux
-        - vim-nox
-      state: latest
-    when: ansible_distribution_file_variety == "Debian" 
-
-  - name: install tmux and vim packages on fedora systems
-    tags: tmux,vim,redhat
-    dnf:
-      name:
-        - tmux
-        - vim
-      state: latest
-    when: ansible_distribution_file_variety == "RedHat"
-
-  - name: copy default html file for site
-    tags: tmux,vim, redhat
-    copy:
-      src: default_site.html
-      dest: /home/dale/default_site.html
-      owner: dale
-      group: dale
-      mode: 0644
+  roles:
+    - web_servers
 
 - hosts: db_servers
   become: true
-  tasks:
+  roles:
+    - db_servers
 
-    - name: uninstall cmatrix
-      tags: cmatrx,debian
-      apt:
-        name:
-          - cmatrix
-        state: absent 
-      when: ansible_distribution_file_variety == "Debian"
+- hosts: file_servers
+  become: true
+  roles:
+    - file_servers
